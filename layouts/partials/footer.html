@@ -1,0 +1,22 @@
+<footer class="site-footer">
+    <div class="footer-content">
+        <div class="footer-copyright">
+            {{ if .Site.Copyright }}
+                {{ .Site.Copyright }}
+            {{ else }}
+                &copy; {{ now.Year }} {{ .Site.Title }}
+            {{ end }}
+        </div>
+        <span class="footer-separator">|</span>
+        <div class="footer-contact">
+            <a href="mailto:dzwlus@outlook.com">CONTACT</a>
+        </div>
+        <span class="footer-separator">|</span>
+        <div class="footer-rss">
+            <a href="{{ .Site.BaseURL }}index.xml">RSS</a>
+        </div>
+        <div class="footer-gallery">
+            <a href="https://gallery.ziwen.cc/">DZW'S GALLERY</a>
+        </div>
+    </div>
+</footer>

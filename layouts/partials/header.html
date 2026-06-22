@@ -1,0 +1,16 @@
+<header class="site-header">
+    <h1 class="site-title">
+        <a href="{{ .Site.BaseURL }}">{{ .Site.Title }}</a>
+    </h1>
+    {{ with .Site.Menus.main }}
+    <nav class="site-nav">
+        <ul>
+            {{ range . }}
+            <li>
+                <a href="{{ .URL }}" {{ if eq $.RelPermalink .URL }}class="active"{{ end }}>{{ .Name }}</a>
+            </li>
+            {{ end }}
+        </ul>
+    </nav>
+    {{ end }}
+</header>

@@ -1,0 +1,69 @@
+baseURL = "https://ziwen.cc/"
+languageCode = "en-us"
+title = "DZW'S BLOG"
+theme = "cuke"
+copyright = "© 2026 DZW"
+
+# 自定义分类法，实现独立标签
+taxonomies.gallery_tag = "gallery_tags"
+taxonomies.post_tag = "post_tags"
+
+# Markdown 渲染配置
+toc = true
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.extensions]
+      definitionList = true  # 定义列表
+      footnote = true  # 脚注
+      linkify = true  # 自动链接
+      strikethrough = true  # 删除线
+      table = true  # 表格
+      taskList = true  # 任务列表
+      typographer = true  # 排版优化
+    [markup.goldmark.parser]
+      attribute = true  # 支持HTML属性
+      autoHeadingID = true  # 自动生成标题ID
+      autoHeadingIDType = "github"  # GitHub风格的标题ID
+    [markup.goldmark.renderer]
+      hardWraps = false  # 不自动换行
+      unsafe = true  # 允许HTML标签
+      xHTML = false  # 不使用XHTML
+  [markup.highlight]
+    codeFences = true  # 代码 fences
+    guessSyntax = true  # 自动猜测语法
+    hl_Lines = ""  # 高亮行
+    lineNoStart = 1  # 行号起始
+    lineNos = false  # 显示行号
+    lineNumbersInTable = true  # 在表格中显示行号
+    noClasses = false  # 使用CSS类
+    style = "monokai"  # 语法高亮风格
+    tabWidth = 2  # Tab宽度
+  [markup.tableOfContents]
+    endLevel = 6  # 目录结束级别
+    ordered = false  # 无序目录
+    startLevel = 1  # 目录起始级别
+
+[params]
+  favicon = "/favicon.png"
+  description = "我在这里记录生活、分享见闻……"
+  author = "DZW"
+  math = true  # 启用数学公式
+  imageZoom = true
+  image_proxy = ""  # 图片加速链接，例如: https://gh-proxy.org/, 留空则不使用
+
+[menu]
+  [[menu.main]]
+    identifier = "home"
+    name = "主页"
+    url = "/"
+    weight = 1
+  [[menu.main]]
+    identifier = "gallery"
+    name = "影集"
+    url = "/gallery/"
+    weight = 2
+  [[menu.main]]
+    identifier = "posts"
+    name = "文章"
+    url = "/posts/"
+    weight = 3

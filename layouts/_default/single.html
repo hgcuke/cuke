@@ -1,0 +1,147 @@
+{{ define "main" }}
+    {{ if not .Params.hide_title }}
+        <h1>{{ .Title }}</h1>
+        {{ if .Date }}
+            <div class="post-date">
+                {{ .Date.Format "02 Jan 2006" }}
+                {{ if eq .Type "gallery" }}
+                    {{ with (.GetTerms "gallery_tags") }}
+                        | {{ range $index, $tag := . }}
+                            {{ if $index }} {{ end }}
+                            <a href="{{ $tag.Permalink }}">#{{ $tag.LinkTitle }}</a>
+                        {{ end }}
+                    {{ end }}
+                {{ else if eq .Type "posts" }}
+                    {{ with (.GetTerms "post_tags") }}
+                        | {{ range $index, $tag := . }}
+                            {{ if $index }} {{ end }}
+                            <a href="{{ $tag.Permalink }}">#{{ $tag.LinkTitle }}</a>
+                        {{ end }}
+                    {{ end }}
+                {{ end }}
+            </div>
+        {{ else }}
+            {{ if eq .Type "gallery" }}
+                {{ with (.GetTerms "gallery_tags") }}
+                    <div class="post-date">
+                        {{ range $index, $tag := . }}
+                            {{ if $index }} {{ end }}
+                            <a href="{{ $tag.Permalink }}">#{{ $tag.LinkTitle }}</a>
+                        {{ end }}
+                    </div>
+                {{ end }}
+            {{ else if eq .Type "posts" }}
+                {{ with (.GetTerms "post_tags") }}
+                    <div class="post-date">
+                        {{ range $index, $tag := . }}
+                            {{ if $index }} {{ end }}
+                            <a href="{{ $tag.Permalink }}">#{{ $tag.LinkTitle }}</a>
+                        {{ end }}
+                    </div>
+                {{ end }}
+            {{ end }}
+        {{ end }}
+    {{ end }}
+    
+
+    
+    {{ if .Content }}
+        <div class="content">
+            {{ .Content }}
+        </div>
+    {{ end }}
+    
+    {{ $tocEnabled := default .Site.Params.toc .Params.toc }}
+    {{ if $tocEnabled }} 
+    <div class="toc">
+    {{ partial "toc.html" . }}
+    </div>
+    {{ end }}
+    
+    {{ if .Params.remote_images }}
+        <section class="gallery">
+            <div id="gallery">
+                {{ $images := slice }}
+                {{ with .Params.remote_images }}
+                    {{ range . }}
+                        {{ $images = $images | append (dict
+                            "Name" (replace .url "/" "-")
+                            "Title" .title
+                            "Date" (time .date | default now)
+                            "url" .url
+                            "width" .width
+                            "height" .height
+                            "Params" .
+                            "isRemote" true
+                        )}}
+                    {{ end }}
+                {{ end }}
+                
+                {{ $imageProxy := .Site.Params.image_proxy }}
+                {{ range sort $images (.Params.sort_by | default "Name") (.Params.sort_order | default "asc") }}
+                    {{ $imageUrl := .url }}
+                    {{ $fullImageUrl := $imageUrl }}
+                    {{ if $imageProxy }}
+                        {{ if not .Params.no_proxy }}
+                            {{ $fullImageUrl = printf "%s%s" $imageProxy $imageUrl }}
+                        {{ end }}
+                    {{ end }}
+                    {{ if $.Site.Params.imageZoom }}
+                    <figure class="gallery-item image-zoom-container">
+                        <input
+                            type="checkbox"
+                            id="gallery-img-{{ substr (md5 $fullImageUrl) 0 8 }}"
+                            class="image-zoom-toggle"
+                            aria-label="放大图片：{{ .Title }}"
+                        />
+                        <label
+                            for="gallery-img-{{ substr (md5 $fullImageUrl) 0 8 }}"
+                            class="image-zoom-label"
+                        >
+                            <img width="{{ .width | default 800 }}" height="{{ .height | default 600 }}" src="{{ $fullImageUrl }}" alt="{{ .Title }}" class="zoomable-image" />
+                        </label>
+                        <label
+                            for="gallery-img-{{ substr (md5 $fullImageUrl) 0 8 }}"
+                            class="image-zoom-overlay"
+                        >
+                            <img src="{{ $fullImageUrl }}" alt="{{ .Title }}" class="zoomable-image" />
+                        </label>
+                    </figure>
+                    {{ else }}
+                    <a class="gallery-item" href="{{ $fullImageUrl }}" title="{{ .Title }}">
+                        <figure>
+                            <img width="{{ .width | default 800 }}" height="{{ .height | default 600 }}" src="{{ $fullImageUrl }}" alt="{{ .Title }}" />
+                        </figure>
+                    </a>
+                    {{ end }}
+                {{ end }}
+            </div>
+        </section>
+    {{ end }}
+
+    <button id="back-to-top" aria-label="返回顶部">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M11.9999 10.8284L7.0502 15.7782L5.63599 14.364L11.9999 8L18.3639 14.364L16.9497 15.7782L11.9999 10.8284Z"></path></svg>
+    </button>
+
+    <script>
+        const backToTopButton = document.getElementById('back-to-top');
+
+        function toggleBackToTop() {
+            if (window.scrollY > 300) {
+                backToTopButton.classList.add('show');
+            } else {
+                backToTopButton.classList.remove('show');
+            }
+        }
+
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        window.addEventListener('scroll', toggleBackToTop);
+        backToTopButton.addEventListener('click', scrollToTop);
+    </script>
+{{ end }}

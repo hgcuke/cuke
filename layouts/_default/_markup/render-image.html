@@ -1,0 +1,44 @@
+{{ $imageUrl := .Destination }}
+{{ $imageProxy := .Page.Site.Params.image_proxy }}
+{{ $finalImageUrl := $imageUrl }}
+
+{{ if $imageProxy }}
+    {{ if or (strings.HasPrefix $imageUrl "http://") (strings.HasPrefix $imageUrl "https://") }}
+        {{ $finalImageUrl = printf "%s%s" $imageProxy $imageUrl }}
+    {{ end }}
+{{ end }}
+
+<figure class="image-caption{{ if $.Page.Site.Params.imageZoom }} image-zoom-container{{ end }}">
+    {{ if $.Page.Site.Params.imageZoom }}
+    <input
+        type="checkbox"
+        id="img-{{ substr (md5 .Destination) 0 8 }}"
+        class="image-zoom-toggle"
+        aria-label="放大图片：{{ .Text }}"
+    />
+    <label
+        for="img-{{ substr (md5 .Destination) 0 8 }}"
+        class="image-zoom-label"
+    >
+        <img
+            src="{{ $finalImageUrl }}"
+            alt="{{ .Text }}"
+            {{ with .Title }} title="{{ . }}"{{ end }}
+            class="zoomable-image"
+        />
+    </label>
+    <label
+        for="img-{{ substr (md5 .Destination) 0 8 }}"
+        class="image-zoom-overlay"
+    >
+        <img
+            src="{{ $finalImageUrl }}"
+            alt="{{ .Text }}"
+            {{ with .Title }} title="{{ . }}"{{ end }}
+            class="zoomable-image"
+        />
+    </label>
+    {{ else }}
+    <img src="{{ $finalImageUrl }}" alt="{{ .Text }}"{{ with .Title }} title="{{ . }}"{{ end }} />
+    {{ end }}
+</figure>
