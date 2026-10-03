@@ -67,7 +67,7 @@
                         {{ $images = $images | append (dict
                             "Name" (replace .url "/" "-")
                             "Title" .title
-                            "Date" (time .date | default now)
+                            "Date" (time (default "1970-01-01" .date))
                             "url" .url
                             "width" .width
                             "height" .height
