@@ -77,15 +77,8 @@
                     {{ end }}
                 {{ end }}
                 
-                {{ $imageProxy := .Site.Params.image_proxy }}
                 {{ range sort $images (.Params.sort_by | default "Name") (.Params.sort_order | default "asc") }}
-                    {{ $imageUrl := .url }}
-                    {{ $fullImageUrl := $imageUrl }}
-                    {{ if $imageProxy }}
-                        {{ if not .Params.no_proxy }}
-                            {{ $fullImageUrl = printf "%s%s" $imageProxy $imageUrl }}
-                        {{ end }}
-                    {{ end }}
+                    {{ $fullImageUrl := .url }}
                     {{ if $.Site.Params.imageZoom }}
                     <figure class="gallery-item image-zoom-container">
                         <input

@@ -49,7 +49,6 @@ toc = true
   author = "DZW"
   math = true  # 启用数学公式
   imageZoom = true
-  image_proxy = ""  # 图片加速链接，例如: https://gh-proxy.org/, 留空则不使用
 
 [menu]
   [[menu.main]]
